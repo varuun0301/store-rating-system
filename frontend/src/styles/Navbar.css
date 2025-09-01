@@ -1,0 +1,33 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1976d2;
+  padding: 12px 20px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.nav-links button {
+  margin-left: 12px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: white;
+  color: #1976d2;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.nav-links button:hover {
+  background: #f1f1f1;
+}

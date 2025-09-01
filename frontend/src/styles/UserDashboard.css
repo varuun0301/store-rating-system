@@ -1,0 +1,61 @@
+.user-dashboard {
+  padding: 20px;
+  background: #f4f6f8;
+  min-height: 100vh;
+}
+
+.user-dashboard h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.store-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.store-card {
+  background: #fff;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.store-img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.stars {
+  margin: 10px 0;
+}
+
+.star {
+  font-size: 28px;
+  cursor: pointer;
+  color: #ccc;
+  transition: 0.3s;
+}
+
+.star.selected {
+  color: #fbc02d;
+}
+
+.store-card button {
+  padding: 10px 15px;
+  background: #1976d2;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.store-card button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}

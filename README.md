@@ -1,70 +1,143 @@
-# Getting Started with Create React App
+# Store Rating System
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack application where **Users** can rate stores, **Owners** can view ratings for their stores, and **Admins** can manage users and stores.  
+Built using **React (frontend)**, **Node.js + Express (backend)**, and **MySQL with Sequelize (database ORM).**
 
-## Available Scripts
+##  Features
+- **Authentication** (JWT-based) for User, Owner, Admin.
+- **Role-based dashboards**:
+  - **User**: signup, login, view stores, give ratings.
+  - **Owner**: login, add their store, view customer ratings & average rating.
+  - **Admin**: login, view all users, stores, ratings; delete users/stores.
+- Secure **password hashing** with bcrypt.
+- Clean **UI with role-based navigation**.
 
-In the project directory, you can run:
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React, Axios, React Router  
+- **Backend**: Node.js, Express  
+- **Database**: PostgreSQL, Sequelize ORM  
+- **Authentication**: JWT (JSON Web Token)  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## ⚙️ Setup Instructions
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 1️.Clone the repository
+```bash
+git clone https://github.com/varuun0301/store-rating-system.git
+cd store-rating-system
+````
 
-### `npm run build`
+### 2️.Backend Setup
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+cd backend
+npm install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+* Configure database in `backend/config/config.json`:
+```json
+{
+  "development": {
+    "username": "root",
+    "password": "yourpassword",
+    "database": "rating_system",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* Run migrations:
+```bash
+npx sequelize db:create
+npx sequelize db:migrate
+```
 
-### `npm run eject`
+* Start backend server:
+```bash
+npm run dev
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Backend runs at **[http://localhost:5000](http://localhost:5000)**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 3️.Frontend Setup
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+cd frontend
+npm install
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Frontend runs at **[http://localhost:3000](http://localhost:3000)**
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## (IMPORTANT) 
+## Creating an Admin User
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Since **Admin signup is disabled in UI**, evaluators must manually create an Admin.
+There are two ways:
 
-### Code Splitting
+### Option 1: Insert directly into DB
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```sql
+INSERT INTO Users (name, email, password, role, address, createdAt, updatedAt)
+VALUES (
+  'Admin User',
+  'admin@example.com',
+  '$2b$10$9JHjWgBC6J6Nv7jz5QpZ9uZpPmpcR0rrpI2R8sL3T5ojSYGfIsdAu', 
+  'ADMIN',
+  'Admin Address',
+  NOW(),
+  NOW()
+);
+```
 
-### Analyzing the Bundle Size
+> Password is `admin123` (bcrypt hashed). Use this to login.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+---
 
-### Making a Progressive Web App
+### Option 2: Use Postman
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. Send a **POST request** to `http://localhost:5000/auth/signup`
+2. Body (JSON):
 
-### Advanced Configuration
+```json
+{
+  "name": "Admin User",
+  "email": "admin@example.com",
+  "password": "admin123",
+  "role": "ADMIN",
+  "address": "Admin Address"
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Now login with email: **[admin@example.com]**, password: **admin123**.
 
-### Deployment
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## 📂 Project Structure
 
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+store-rating-system/
+│── backend/                # Node.js + Express + Sequelize
+│   ├── config/             # DB config
+│   ├── migrations/         # Sequelize migrations
+│   ├── models/             # Sequelize models
+│   ├── routes/             # Express routes (auth, admin, owner, user)
+│   └── index.js            # Backend entry point
+│
+│── frontend/               # React frontend
+│   ├── src/
+│   │   ├── pages/          # Pages (Login, Signup, Dashboards)
+│   │   ├── components/     # Navbar
+│   │   ├── styles/         # CSS files
+│   │   └── api.js          # Axios setup
+│   └── public/
+│
+└── README.md
+```
+facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
